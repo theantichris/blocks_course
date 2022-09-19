@@ -25,3 +25,10 @@ puts "\nTotal miles flown: #{total_miles_flown}\n\n"
 
 promotions = { "United" => 1.5, "Delta" => 2.0, "Lufthansa" => 2.5 }
 promotions.each { |airline, bonus| puts "Earn #{bonus}x miles by flying #{airline.capitalize}!"}
+
+puts "\n\n"
+flyers.each do |flyer|
+  promotions.each do |airline, bonus|
+    puts "#{flyer.name} could earn #{flyer.miles_flown * bonus} miles by flying #{airline}!"
+  end
+end
