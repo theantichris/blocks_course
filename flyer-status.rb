@@ -61,3 +61,7 @@ puts total_km
 puts "\nTotal KM Flown By Bronze Flyers:"
 total_km_bronze = flyers.select { |flyer| flyer.status == :bronze }.map{ |flyer| flyer.miles_flown * 1.6 }.reduce(:+)
 p total_km_bronze
+
+puts "\nFlyer With Most Miles"
+flyer_with_most_miles = flyers.max_by { |flyer| flyer.miles_flown }
+puts flyer_with_most_miles
