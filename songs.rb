@@ -13,6 +13,8 @@ class Song
 end
 
 class Playlist
+  include Enumerable
+
   def initialize(name)
     @name = name
     @songs = []
@@ -42,4 +44,5 @@ my_playlist.add_song(song3)
 
 my_playlist.each{ |song| song.play }
 
-my_playlist.play_songs
+elvis_songs = my_playlist.select { |song| song.name =~ /Elvis/ }
+p elvis_songs
