@@ -35,6 +35,10 @@ class Playlist
   def each_tagline
     @songs.each { |song| yield("#{song.name} - #{song.artist}") }
   end
+
+  def each_by_artist(artist)
+    @songs.select { |song| song.artist == artist }.each { |song| yield(song)}
+  end
 end
 
 song1 = Song.new("Bleed The Freak", "Alice In Chains", 4)
@@ -52,3 +56,5 @@ elvis_songs = playlist.select { |song| song.name =~ /Elvis/ }
 p elvis_songs
 
 playlist.each_tagline { |tagline| puts tagline }
+
+playlist.each_by_artist("Alice In Chains") { |song| song.play }
