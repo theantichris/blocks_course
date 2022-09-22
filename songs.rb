@@ -1,3 +1,5 @@
+require_relative 'my_enumerable'
+
 class Song
   attr_reader :name, :artist, :duration
 
@@ -13,7 +15,8 @@ class Song
 end
 
 class Playlist
-  include Enumerable
+  # include Enumerable
+  include MyEnumerable
 
   def initialize(name)
     @name = name
@@ -61,7 +64,7 @@ playlist.add_song(song3)
 
 playlist.each{ |song| song.play }
 
-elvis_songs = playlist.select { |song| song.name =~ /Elvis/ }
+elvis_songs = playlist.my_select { |song| song.name =~ /Elvis/ }
 p elvis_songs
 
 playlist.each_tagline { |tagline| puts tagline }
