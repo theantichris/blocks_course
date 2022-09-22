@@ -1,3 +1,5 @@
+require 'benchmark'
+
 def with_debugging
   puts "Got here!"
 
@@ -19,8 +21,21 @@ def with_expectation(expected_value)
   end
 end
 
+def time_it(name)
+  elapsed_time = Benchmark.realtime do
+    yield
+  end
+
+  puts "#{name} took #{elapsed_time}"
+end
+
 with_debugging do
   magic_number = (23 - Time.now.hour) * Math::PI
 end
 
 with_expectation(4) { 2 + 2 }
+
+time_it("Sleepy code") do
+  # run some code
+  sleep(1)
+end
