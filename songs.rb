@@ -37,7 +37,16 @@ class Playlist
   end
 
   def each_by_artist(artist)
-    @songs.select { |song| song.artist == artist }.each { |song| yield(song)}
+    @songs.select { |song| song.artist == artist }.each { |song| yield(song) }
+  end
+
+  def each_filename
+    @songs.each do |song|
+      base_filename = "#{song.name}-#{song.artist}".downcase.gsub(" ", "-")
+      extensions = %w[.mp3 .wave .aac]
+
+      extensions.each { |ext| yield(base_filename+ext) }
+    end
   end
 end
 
@@ -58,3 +67,5 @@ p elvis_songs
 playlist.each_tagline { |tagline| puts tagline }
 
 playlist.each_by_artist("Alice In Chains") { |song| song.play }
+
+playlist.each_filename { |filename| puts filename }
