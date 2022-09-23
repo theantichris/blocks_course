@@ -23,11 +23,28 @@ class DatabaseDriver
     puts "Executing #{sql}..."
     # executes SQL
   end
+
+  def self.open(database, user, password)
+    driver = DatabaseDriver.new(database, user, password)
+
+    return driver unless block_given?
+
+    begin
+      yield(driver)
+    ensure
+      driver.disconnect
+    end
+  end
 end
 
-driver = DatabaseDriver.new("my_database", "admin", "secret")
+DatabaseDriver.open("my_database", "admin", "secret") do |driver|
+  driver.execute("SELECT * FROM ORDERS")
+  raise "Boom!"
+  driver.execute("SELECT * FROM USERS")
+end
 
-driver.connect
-driver.execute("SELECT * FROM ORDERS")
-driver.execute("SELECT * FROM USERS")
-driver.disconnect
+# driver = DatabaseDriver.new("my_database", "admin", "secret")
+# driver.connect
+# driver.execute("SELECT * FROM ORDERS")
+# driver.execute("SELECT * FROM USERS")
+# driver.disconnect
