@@ -17,9 +17,9 @@ class Application
     puts "Writing to #{@environment} log file..."
   end
 
-  def in_production
+  def in_environment(new_environment)
     old_environment = @environment
-    @environment = :production
+    @environment = new_environment
 
     yield
 
@@ -33,7 +33,7 @@ end
 
 app = Application.new
 
-app.in_production do
+app.in_environment(:production) do
   app.connect_to_database
   app.handle_request
 
