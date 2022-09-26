@@ -24,8 +24,22 @@ class DatabaseDriver
     # executes SQL
   end
 
+  def transactionally
+    begin
+      puts "Beginning transaction..."
+
+      yield
+
+      puts "Committed transaction."
+    rescue => exception
+      puts "Rolled back transaction!"
+    ensure
+    end
+  end
+
   def self.open(database, user, password)
     driver = DatabaseDriver.new(database, user, password)
+    driver.connect
 
     return driver unless block_given?
 
@@ -38,10 +52,22 @@ class DatabaseDriver
 end
 
 DatabaseDriver.open("my_database", "admin", "secret") do |driver|
+  driver.transactionally do
+    driver.execute("UPDATE ORDERS SET status='completed'")
+    raise "Boom!"
+    driver.execute("DELETE * FROM SHIPPING_QUEUE")
+  end
+
+  # not run in a transaction
   driver.execute("SELECT * FROM ORDERS")
-  raise "Boom!"
   driver.execute("SELECT * FROM USERS")
 end
+
+# DatabaseDriver.open("my_database", "admin", "secret") do |driver|
+#   driver.execute("SELECT * FROM ORDERS")
+#   # raise "Boom!"
+#   driver.execute("SELECT * FROM USERS")
+# end
 
 # driver = DatabaseDriver.new("my_database", "admin", "secret")
 # driver.connect
